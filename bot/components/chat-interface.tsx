@@ -9,9 +9,10 @@ import { Avatar } from "@/components/ui/avatar"
 import { Card } from "@/components/ui/card"
 import { Send, Mic, User } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
 import { useUser } from "@clerk/nextjs"
+
+// Import GoogleGenerativeAI
+import { GoogleGenerativeAI } from "@google/generative-ai"
 
 type Message = {
   id: string
@@ -20,12 +21,16 @@ type Message = {
   timestamp?: Date
 }
 
+// Initialize Google Generative AI outside of the component
+const genAI = new GoogleGenerativeAI("AIzaSyDF1VWOQ77JBvJ0mTm3Lu3YKTvKv7ui9-E")
+const geminiModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
+
 export function ChatInterface() {
   const { user } = useUser()
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome-message",
-      content: `Hello${user?.firstName ? ` ${user.firstName}` : ""}! I'm the AI Sentinel of Knowledge. How can I help you with your IDMS ERP system today?`,
+      content: `Hello! I'm the AI Sentinel of Knowledge. How can I help you with your IDMS ERP system today?`,
       role: "assistant",
       timestamp: new Date(),
     },
@@ -38,22 +43,19 @@ export function ChatInterface() {
     scrollToBottom()
   }, [messages])
 
-  // Update welcome message when user data loads
+  // Update welcome message when user data loads - with fixed dependency array
   useEffect(() => {
-    if (user && messages.length === 1 && messages[0].id === "welcome-message") {
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === "welcome-message"
-            ? {
-                ...msg,
-                content: `Hello ${user.firstName || ""}! I'm the AI Sentinel of Knowledge. How can I help you with your IDMS ERP system today?`,
-              }
-            : msg
-        )
-      );
+    if (user?.firstName && messages.length === 1 && messages[0].id === "welcome-message") {
+      setMessages([
+        {
+          id: "welcome-message",
+          content: `Hello ${user.firstName || ""}! I'm the AI Sentinel of Knowledge. How can I help you with your IDMS ERP system today?`,
+          role: "assistant",
+          timestamp: new Date()
+        },
+      ]);
     }
-  }, [user]);
-  
+  }, [user?.firstName]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -85,27 +87,50 @@ export function ChatInterface() {
           "\n\nPlease use this information if relevant to answer the user's question."
       }
 
-      // Create a system prompt that includes knowledge base context and user info
+      // Create content for Gemini with system instructions and context
       const userInfo = user ? `The user's name is ${user.firstName} ${user.lastName}.` : ""
-
+      
       const systemPrompt = `You are the AI Sentinel of Knowledge, an assistant for the IDMS ERP system. 
-    ${userInfo}
-    Provide helpful, concise responses about ERP functionality, modules like Sales, HR, and Finance.
-    ${contextPrompt}
-    
-    If you're not sure about something, be honest about your limitations.
-    If the question requires escalation to human support, suggest that option.`
+      ${userInfo}
+      Provide helpful, concise responses about ERP functionality, modules like Sales, HR, and Finance.
+      ${contextPrompt}
+      
+      If you're not sure about something, be honest about your limitations.
+      If the question requires escalation to human support, suggest that option.`
 
-      // Use the AI SDK to generate a response with streaming
-      const { text } = await generateText({
-        model: openai("gpt-4o"),
-        prompt: input,
-        system: systemPrompt,
-      })
+      // Create the chat history for Gemini - only include user and assistant messages
+      // Fix: Gemini requires first message to be from user
+      const chatMessages = [];
+      
+      // Filter messages and convert to Gemini format
+      const filteredMessages = messages.filter(msg => msg.role !== "system" && msg.id !== "welcome-message");
+      
+      for (const msg of filteredMessages) {
+        chatMessages.push({
+          role: msg.role === "user" ? "user" : "model",
+          parts: [{ text: msg.content }]
+        });
+      }
+      
+      // Add current user message
+      chatMessages.push({
+        role: "user",
+        parts: [{ text: input + "\n\nSystem context (not visible to user): " + systemPrompt }]
+      });
+
+      // Generate a response
+      const result = await geminiModel.generateContent({
+        contents: chatMessages,
+        generationConfig: {
+          maxOutputTokens: 800,
+        },
+      });
+
+      const responseText = result.response.text();
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: text,
+        content: responseText,
         role: "assistant",
         timestamp: new Date(),
       }
@@ -113,7 +138,7 @@ export function ChatInterface() {
       setMessages((prev) => [...prev, assistantMessage])
 
       // Log this interaction for analytics
-      logInteraction(input, text, relevantKnowledge.length > 0)
+      logInteraction(input, responseText, relevantKnowledge.length > 0)
     } catch (error) {
       console.error("Error generating response:", error)
       const errorMessage: Message = {
@@ -244,4 +269,3 @@ export function ChatInterface() {
     </div>
   )
 }
-
