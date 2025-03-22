@@ -140,8 +140,8 @@ export function AppSidebar() {
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={pathname === "/admin/knowledge"}>
-                      <Link href="/admin/knowledge">
+                    <SidebarMenuButton asChild isActive={pathname === "/knowledge"}>
+                      <Link href="/knowledge">
                         <BookOpen className="h-4 w-4" />
                         <span>Knowledge Base</span>
                       </Link>
