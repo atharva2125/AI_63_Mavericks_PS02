@@ -41,16 +41,19 @@ export function ChatInterface() {
   // Update welcome message when user data loads
   useEffect(() => {
     if (user && messages.length === 1 && messages[0].id === "welcome-message") {
-      setMessages([
-        {
-          id: "welcome-message",
-          content: `Hello ${user.firstName || ""}! I'm the AI Sentinel of Knowledge. How can I help you with your IDMS ERP system today?`,
-          role: "user",
-          timestamp: new Date()
-        },
-      ]);
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === "welcome-message"
+            ? {
+                ...msg,
+                content: `Hello ${user.firstName || ""}! I'm the AI Sentinel of Knowledge. How can I help you with your IDMS ERP system today?`,
+              }
+            : msg
+        )
+      );
     }
-  }, [user, messages]);
+  }, [user]);
+  
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
