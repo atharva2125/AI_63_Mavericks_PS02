@@ -1,0 +1,136 @@
+{
+  "GST_FAQs": [
+    {
+      "id": "Q1",
+      "question": "What is GST and why is it important for businesses?",
+      "answer": "GST (Goods and Services Tax) is an indirect tax levied on the supply of goods and services in India. It replaces multiple indirect taxes and ensures a unified taxation system. Businesses must comply with GST regulations to avoid penalties and ensure smooth operations."
+    },
+    {
+      "id": "Q2",
+      "question": "How does IDMS help in GST compliance?",
+      "answer": "IDMS ERP integrates GST into every transaction, ensuring automatic tax calculations, validation of GSTIN, real-time invoice generation, and GST return filing support (GSTR-1, GSTR-3B, etc.)."
+    },
+    {
+      "id": "Q3",
+      "question": "What are the different types of GST in IDMS?",
+      "answer": {
+        "types": [
+          {
+            "name": "CGST",
+            "fullForm": "Central Goods and Services Tax",
+            "appliedOn": "Intra-state sales",
+            "collectedBy": "Central Govt."
+          },
+          {
+            "name": "SGST",
+            "fullForm": "State Goods and Services Tax",
+            "appliedOn": "Intra-state sales",
+            "collectedBy": "State Govt."
+          },
+          {
+            "name": "IGST",
+            "fullForm": "Integrated Goods and Services Tax",
+            "appliedOn": "Inter-state sales",
+            "collectedBy": "Central Govt."
+          },
+          {
+            "name": "UTGST",
+            "fullForm": "Union Territory GST",
+            "appliedOn": "Sales within UTs",
+            "collectedBy": "UT Govt."
+          }
+        ]
+      }
+    },
+    {
+      "id": "Q4",
+      "question": "What is the role of HSN & SAC codes in IDMS?",
+      "answer": "HSN (Harmonized System of Nomenclature) codes classify goods, while SAC (Service Accounting Code) codes classify services for GST purposes. IDMS assigns these codes to each item and service for accurate taxation."
+    },
+    {
+      "id": "Q5",
+      "question": "How does E-Invoicing work in IDMS?",
+      "answer": "E-invoices are generated digitally and validated through the Government's Invoice Registration Portal (IRP), which assigns a unique Invoice Reference Number (IRN) and QR code."
+    },
+    {
+      "id": "Q6",
+      "question": "When is an E-Way Bill required?",
+      "answer": "If goods worth more than ₹50,000 are being transported, an E-Way Bill must be generated via IDMS. It contains transporter details, invoice information, and route details."
+    },
+    {
+      "id": "Q7",
+      "question": "What is the Reverse Charge Mechanism (RCM) in GST?",
+      "answer": "Under RCM, instead of the supplier, the buyer is liable to pay GST to the government for certain transactions (e.g., purchases from unregistered dealers)."
+    },
+    {
+      "id": "Q8",
+      "question": "How does IDMS handle tax invoice vs. proforma invoice?",
+      "answer": "A proforma invoice is a preliminary bill issued before the actual sale, while a tax invoice is a legal document for GST compliance. IDMS automates the conversion of proforma invoices into tax invoices."
+    },
+    {
+      "id": "Q9",
+      "question": "Can IDMS generate GST returns automatically?",
+      "answer": "Yes, IDMS compiles sales and purchase data to generate GSTR-1 (Outward Supplies), GSTR-3B (Monthly Summary Return), and GSTR-2A (Auto-drafted Inward Supplies Report)."
+    },
+    {
+      "id": "Q10",
+      "question": "How does IDMS help in reconciling GST mismatches?",
+      "answer": "IDMS provides detailed GST reports and mismatch reports, ensuring accurate tax data before filing returns."
+    },
+    {
+      "id": "Q11",
+      "question": "What is GSTR-1 and how does IDMS help in filing it?",
+      "answer": "GSTR-1 is a monthly or quarterly return that details all outward supplies (sales) made by a business. IDMS automatically compiles and formats sales data (invoices, credit notes, and debit notes) and generates GSTR-1 reports for direct upload to the GST portal."
+    },
+    {
+      "id": "Q12",
+      "question": "What is GSTR-3B and how does IDMS assist in its filing?",
+      "answer": "GSTR-3B is a monthly summary return of both inward and outward supplies, along with GST payable. IDMS consolidates sales and purchase transactions and auto-computes GST liabilities, enabling seamless 3B return filing."
+    },
+    {
+      "id": "Q13",
+      "question": "How does IDMS handle ITC (Input Tax Credit)?",
+      "answer": "Input Tax Credit (ITC) allows businesses to claim GST paid on purchases against their GST liability on sales. IDMS maintains a ledger of ITC claims, matches them with GSTR-2A (auto-drafted supplier details from GSTN), and reconciles any discrepancies."
+    },
+    {
+      "id": "Q14",
+      "question": "What happens if there is a GST mismatch in IDMS?",
+      "answer": "IDMS flags mismatches in GST returns (e.g., invoices missing from supplier records in GSTR-2A). It provides reconciliation reports, suggesting corrections before final filing."
+    },
+    {
+      "id": "Q15",
+      "question": "How does IDMS manage GST for inter-state vs. intra-state transactions?",
+      "answer": "IDMS automatically differentiates between: Intra-state transactions (CGST & SGST applied), Inter-state transactions (IGST applied), Exports (Zero-rated supply with/without LUT), and Reverse charge transactions (RCM applicable)."
+    },
+    {
+      "id": "Q16",
+      "question": "How are HSN-wise summary reports generated in IDMS?",
+      "answer": "GST law mandates that invoices include HSN/SAC codes based on turnover limits. IDMS compiles HSN-wise tax summaries and prepares reports in GST-compliant format."
+    },
+    {
+      "id": "Q17",
+      "question": "What happens if a sales invoice is cancelled after GST has been filed?",
+      "answer": "If an invoice is cancelled before GST filing, it is simply removed. If cancelled after GST return submission, IDMS ensures a Credit Note is issued, adjusting tax liabilities in the next GST cycle."
+    },
+    {
+      "id": "Q18",
+      "question": "How does IDMS handle GST-exempt and zero-rated supplies?",
+      "answer": "IDMS supports: GST-exempt goods (e.g., agricultural products, healthcare services), Zero-rated supplies (exports, supplies to SEZ), and GST-exempt customers (charitable organizations, government departments)."
+    },
+    {
+      "id": "Q19",
+      "question": "How does IDMS automate GST payments?",
+      "answer": "IDMS calculates net GST liability, generates a Challan for GST payment (PMT-06), and facilitates online payments via Net Banking, UPI, or NEFT/RTGS."
+    },
+    {
+      "id": "Q20",
+      "question": "How does IDMS generate audit reports for GST compliance?",
+      "answer": "IDMS maintains a detailed audit trail for: GST ledger reconciliation (sales vs. purchases), Invoice modifications & corrections, and GSTR-9 (Annual Return) & GSTR-9C (Reconciliation Statement)."
+    },
+    {
+      "id": "Q21",
+      "question": "What is the penalty for late GST filing?",
+      "answer": "The penalty for late GST filing is ₹50 per day for CGST and ₹50 per day for SGST, subject to a maximum of ₹10,000."
+    }
+  ]
+}
