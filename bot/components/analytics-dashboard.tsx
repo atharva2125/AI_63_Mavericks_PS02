@@ -36,12 +36,10 @@ const departmentUsage = [
   { id: 5, department: "IT", queries: 190, resolutionRate: 91.1 },
 ]
 
-export default function AnalyticsPage() {
+export function AnalyticsDashboard() {
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-8">AI Sentinel Analytics</h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Total Queries</CardTitle>

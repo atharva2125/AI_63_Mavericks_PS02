@@ -18,7 +18,7 @@ type KnowledgeItem = {
   keywords: string[]
 }
 
-export default function KnowledgeBasePage() {
+export function KnowledgeBaseManager() {
   const [knowledgeItems, setKnowledgeItems] = useState<KnowledgeItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
@@ -93,9 +93,7 @@ export default function KnowledgeBasePage() {
   )
 
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-8">Knowledge Base Management</h1>
-
+    <>
       <div className="flex justify-between items-center mb-6">
         <Input
           placeholder="Search knowledge base..."
@@ -215,7 +213,7 @@ export default function KnowledgeBasePage() {
           </CardContent>
         </Card>
       )}
-    </div>
+    </>
   )
 }
 

@@ -1,18 +1,14 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Bell, HelpCircle, Search, User } from "lucide-react"
+import { Bell, HelpCircle, Search } from "lucide-react"
+import Link from "next/link"
+import { useAuth, UserButton } from "@clerk/nextjs"
 
 export function AppHeader() {
+  const { isSignedIn } = useAuth()
+
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
       <SidebarTrigger />
@@ -37,22 +33,13 @@ export function AppHeader() {
           <span className="sr-only">Help</span>
         </Button>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
-              <User className="h-5 w-5" />
-              <span className="sr-only">User</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {isSignedIn ? (
+          <UserButton afterSignOutUrl="/" />
+        ) : (
+          <Button asChild variant="default" size="sm">
+            <Link href="/sign-in">Sign In</Link>
+          </Button>
+        )}
       </div>
     </header>
   )

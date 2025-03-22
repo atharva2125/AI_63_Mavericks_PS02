@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { AppHeader } from "@/components/app-header"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarProvider } from "@/components/ui/sidebar"
+import { ClerkProvider } from "@clerk/nextjs"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -21,21 +22,23 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <SidebarProvider>
-            <div className="flex min-h-screen">
-              <AppSidebar />
-              <div className="flex-1">
-                <AppHeader />
-                {children}
+    <ClerkProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <SidebarProvider>
+              <div className="flex min-h-screen">
+                <AppSidebar />
+                <div className="flex-1">
+                  <AppHeader />
+                  {children}
+                </div>
               </div>
-            </div>
-          </SidebarProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+            </SidebarProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
 

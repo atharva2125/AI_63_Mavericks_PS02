@@ -1,11 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { auth } from "@clerk/nextjs"
 
 // In a real application, this would save to a database
 const interactionLogs: any[] = []
 
 export async function POST(request: NextRequest) {
   try {
-    const { query, response, usedKnowledgeBase, timestamp } = await request.json()
+    const { userId } = auth()
+    const { query, response, usedKnowledgeBase, timestamp, userId: clientUserId } = await request.json()
 
     // Validate required fields
     if (!query || !response) {
@@ -19,7 +21,7 @@ export async function POST(request: NextRequest) {
       response,
       usedKnowledgeBase,
       timestamp,
-      // In a real app, you would include user info, session data, etc.
+      userId: userId || clientUserId || null,
     }
 
     // Store the log (in a real app, this would go to a database)
@@ -38,6 +40,10 @@ export async function POST(request: NextRequest) {
 
 // For demo purposes, we'll add a GET endpoint to retrieve logs
 export async function GET() {
+  const { userId } = auth()
+
+  // In a real app, you would check if the user has admin permissions
+  // For now, we'll just return all logs
   return NextResponse.json({ logs: interactionLogs })
 }
 

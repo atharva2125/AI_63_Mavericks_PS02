@@ -11,19 +11,21 @@ import { Send, Mic, User } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { generateText } from "ai"
 import { openai } from "@ai-sdk/openai"
+import { useUser } from "@clerk/nextjs"
 
 type Message = {
   id: string
   content: string
   role: "user" | "assistant" | "system"
-  timestamp: Date
+  timestamp?: Date
 }
 
 export function ChatInterface() {
+  const { user } = useUser()
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome-message",
-      content: "Hello! I'm the AI Sentinel of Knowledge. How can I help you with your IDMS ERP system today?",
+      content: `Hello${user?.firstName ? ` ${user.firstName}` : ""}! I'm the AI Sentinel of Knowledge. How can I help you with your IDMS ERP system today?`,
       role: "assistant",
       timestamp: new Date(),
     },
@@ -35,6 +37,20 @@ export function ChatInterface() {
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  // Update welcome message when user data loads
+  useEffect(() => {
+    if (user && messages.length === 1 && messages[0].id === "welcome-message") {
+      setMessages([
+        {
+          id: "welcome-message",
+          content: `Hello ${user.firstName || ""}! I'm the AI Sentinel of Knowledge. How can I help you with your IDMS ERP system today?`,
+          role: "user",
+          timestamp: new Date()
+        },
+      ]);
+    }
+  }, [user, messages]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -66,8 +82,11 @@ export function ChatInterface() {
           "\n\nPlease use this information if relevant to answer the user's question."
       }
 
-      // Create a system prompt that includes knowledge base context
+      // Create a system prompt that includes knowledge base context and user info
+      const userInfo = user ? `The user's name is ${user.firstName} ${user.lastName}.` : ""
+
       const systemPrompt = `You are the AI Sentinel of Knowledge, an assistant for the IDMS ERP system. 
+    ${userInfo}
     Provide helpful, concise responses about ERP functionality, modules like Sales, HR, and Finance.
     ${contextPrompt}
     
@@ -131,6 +150,7 @@ export function ChatInterface() {
           response,
           usedKnowledgeBase,
           timestamp: new Date().toISOString(),
+          userId: user?.id || null,
         }),
       })
     } catch (error) {
@@ -164,15 +184,23 @@ export function ChatInterface() {
             <Card className={cn("p-3", message.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted")}>
               <p className="text-sm whitespace-pre-wrap">{message.content}</p>
               <div className="text-xs opacity-70 mt-1">
-                {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                {message.timestamp ? message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""}
               </div>
             </Card>
 
             {message.role === "user" && (
               <Avatar className="h-8 w-8">
-                <div className="bg-secondary text-secondary-foreground flex items-center justify-center h-full w-full">
-                  <User className="h-4 w-4" />
-                </div>
+                {user?.imageUrl ? (
+                  <img
+                    src={user.imageUrl || "/placeholder.svg"}
+                    alt={user.firstName || "User"}
+                    className="h-full w-full object-cover rounded-full"
+                  />
+                ) : (
+                  <div className="bg-secondary text-secondary-foreground flex items-center justify-center h-full w-full">
+                    <User className="h-4 w-4" />
+                  </div>
+                )}
               </Avatar>
             )}
           </div>
